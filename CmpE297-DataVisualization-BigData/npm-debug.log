@@ -1,0 +1,93 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'install', 'hdfs_bindings' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.32
+4 verbose node symlink /usr/bin/node
+5 warn package.json fs@0.0.2 fs is also the name of a node core module.
+6 warn package.json fs@0.0.2 No description
+7 warn package.json fs@0.0.2 No repository field.
+8 warn package.json http@0.0.0 http is also the name of a node core module.
+9 warn package.json http@0.0.0 No description
+10 warn package.json http@0.0.0 No repository field.
+11 warn package.json http@0.0.0 No README data
+12 warn package.json syncqueue@0.1.0 No repository field.
+13 verbose readDependencies using package.json deps
+14 verbose cache add [ 'hdfs_bindings', null ]
+15 verbose cache add name=undefined spec="hdfs_bindings" args=["hdfs_bindings",null]
+16 verbose parsed url { protocol: null,
+16 verbose parsed url   slashes: null,
+16 verbose parsed url   auth: null,
+16 verbose parsed url   host: null,
+16 verbose parsed url   port: null,
+16 verbose parsed url   hostname: null,
+16 verbose parsed url   hash: null,
+16 verbose parsed url   search: null,
+16 verbose parsed url   query: null,
+16 verbose parsed url   pathname: 'hdfs_bindings',
+16 verbose parsed url   path: 'hdfs_bindings',
+16 verbose parsed url   href: 'hdfs_bindings' }
+17 silly lockFile e39eba7b-hdfs-bindings hdfs_bindings
+18 verbose lock hdfs_bindings /home/ankith/.npm/e39eba7b-hdfs-bindings.lock
+19 silly lockFile e39eba7b-hdfs-bindings hdfs_bindings
+20 silly lockFile e39eba7b-hdfs-bindings hdfs_bindings
+21 verbose addNamed [ 'hdfs_bindings', '' ]
+22 verbose addNamed [ null, '*' ]
+23 silly lockFile e7c344f9-hdfs-bindings hdfs_bindings@
+24 verbose lock hdfs_bindings@ /home/ankith/.npm/e7c344f9-hdfs-bindings.lock
+25 silly addNameRange { name: 'hdfs_bindings', range: '*', hasData: false }
+26 verbose request where is /hdfs_bindings
+27 verbose request registry https://registry.npmjs.org/
+28 verbose request id 80426ca072a9e920
+29 verbose url raw /hdfs_bindings
+30 verbose url resolving [ 'https://registry.npmjs.org/', './hdfs_bindings' ]
+31 verbose url resolved https://registry.npmjs.org/hdfs_bindings
+32 verbose request where is https://registry.npmjs.org/hdfs_bindings
+33 info trying registry request attempt 1 at 23:33:03
+34 http GET https://registry.npmjs.org/hdfs_bindings
+35 http 404 https://registry.npmjs.org/hdfs_bindings
+36 verbose headers { date: 'Fri, 03 Oct 2014 06:33:04 GMT',
+36 verbose headers   server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+36 verbose headers   'content-type': 'application/json',
+36 verbose headers   'cache-control': 'max-age=0',
+36 verbose headers   'content-length': '52',
+36 verbose headers   'accept-ranges': 'bytes',
+36 verbose headers   via: '1.1 varnish',
+36 verbose headers   age: '0',
+36 verbose headers   'x-served-by': 'cache-sjc3130-SJC',
+36 verbose headers   'x-cache': 'MISS',
+36 verbose headers   'x-cache-hits': '0',
+36 verbose headers   'x-timer': 'S1412317983.999433,VS0,VE159',
+36 verbose headers   'keep-alive': 'timeout=10, max=50',
+36 verbose headers   connection: 'Keep-Alive' }
+37 silly registry.get cb [ 404,
+37 silly registry.get   { date: 'Fri, 03 Oct 2014 06:33:04 GMT',
+37 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+37 silly registry.get     'content-type': 'application/json',
+37 silly registry.get     'cache-control': 'max-age=0',
+37 silly registry.get     'content-length': '52',
+37 silly registry.get     'accept-ranges': 'bytes',
+37 silly registry.get     via: '1.1 varnish',
+37 silly registry.get     age: '0',
+37 silly registry.get     'x-served-by': 'cache-sjc3130-SJC',
+37 silly registry.get     'x-cache': 'MISS',
+37 silly registry.get     'x-cache-hits': '0',
+37 silly registry.get     'x-timer': 'S1412317983.999433,VS0,VE159',
+37 silly registry.get     'keep-alive': 'timeout=10, max=50',
+37 silly registry.get     connection: 'Keep-Alive' } ]
+38 silly lockFile e7c344f9-hdfs-bindings hdfs_bindings@
+39 silly lockFile e7c344f9-hdfs-bindings hdfs_bindings@
+40 error 404 404 Not Found: hdfs_bindings
+40 error 404
+40 error 404 'hdfs_bindings' is not in the npm registry.
+40 error 404 You should bug the author to publish it
+40 error 404 It was specified as a dependency of 'MathSolver'
+40 error 404
+40 error 404 Note that you can also install from a
+40 error 404 tarball, folder, or http url, or git url.
+41 error System Linux 3.13.0-36-generic
+42 error command "/usr/bin/node" "/usr/bin/npm" "install" "hdfs_bindings"
+43 error cwd /home/ankith/node_workspace/HelloMongo
+44 error node -v v0.10.32
+45 error npm -v 1.4.28
+46 error code E404
+47 verbose exit [ 1, true ]
