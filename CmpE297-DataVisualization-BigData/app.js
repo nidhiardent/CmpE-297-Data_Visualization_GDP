@@ -4,8 +4,6 @@
  */
 
 var express = require('express');
-var routes = require('./routes');
-var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 var ejs = require("ejs");
@@ -16,9 +14,10 @@ var app = express();
 
 //Hadoop
 var hadoop = require("./routes/hadoop");
-var mongo_hd = require("./routes/user");
+var mongo_hd = require("./routes/mongo_hadoop");
+var md = require("./routes/mongo");
 
-// all environments
+//all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -31,13 +30,51 @@ app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Only MongoDb
-app.get('/', routes.index);
+app.get('/mongo', md.mongo);
 //Only Hadoop
 app.get('/hadoop', hadoop.fetchData);
 //Mongo + Hadoop
-app.get('/user', mongo_hd.mongo_hadoop);
-app.get('/output', mongo_hd.output_to_mongo);
+app.get('/mongo_hadoop', mongo_hd.mongo_hadoop);
 
+
+//Home Page
+app.get('/', function(req, res){
+	res.render('index');
+});
+app.get('/index', function(req, res){
+	res.render('index');
+});
+//Chart page
+app.get('/chart', function(req, res){
+	res.render('chart');
+});
+
+//icon Page
+app.get('/icon', function(req, res){
+	res.render('icon');
+});
+
+//table Page
+app.get('/table', function(req, res){
+	res.render('table');
+});
+
+//typography Page
+app.get('/typography', function(req, res){
+	res.render('typography');
+});
+
+//UI Page
+app.get('/ui', function(req, res){
+	res.render('ui');
+});
+
+//widget Page
+app.get('/widgets', function(req, res){
+	res.render('widgets');
+});
+
+//Create Server
 http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+	console.log('Express server listening on port ' + app.get('port'));
 });
