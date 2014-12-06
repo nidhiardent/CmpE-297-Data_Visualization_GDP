@@ -16,6 +16,7 @@
 							</ul>	
 						</li>
 						<li><a href="chart"><i class="icon-list-alt"></i><span class="hidden-tablet"> Charts</span></a></li>
+
 						<li><a href="table"><i class="icon-align-justify"></i><span class="hidden-tablet"> Top Importers/Exporters</span></a></li>
 						<li><a href="feature"><i class="icon-font"></i><span class="hidden-tablet"> Features</span></a></li>
 						<li><a href="about"><i class="icon-star"></i><span class="hidden-tablet"> About Us</span></a></li>

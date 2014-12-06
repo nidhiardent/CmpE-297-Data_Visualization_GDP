@@ -50,8 +50,8 @@ app.get('/chart', function(req, res){
 });
 
 //icon Page
-app.get('/icon', function(req, res){
-	res.render('icon');
+app.get('/about', function(req, res){
+	res.render('about');
 });
 
 //table Page
@@ -60,18 +60,23 @@ app.get('/table', function(req, res){
 });
 
 //typography Page
-app.get('/typography', function(req, res){
-	res.render('typography');
+app.get('/feature', function(req, res){
+	res.render('feature');
 });
 
 //UI Page
-app.get('/ui', function(req, res){
-	res.render('ui');
+app.get('/world_gdp', function(req, res){
+	res.render('world_gdp');
 });
 
 //widget Page
-app.get('/widgets', function(req, res){
-	res.render('widgets');
+app.get('/line_graph_gdp', function(req, res){
+	res.render('line_graph_gdp');
+});
+
+//widget Page
+app.get('/top_countries_gdp', function(req, res){
+	res.render('top_countries_gdp');
 });
 
 //Create Server
