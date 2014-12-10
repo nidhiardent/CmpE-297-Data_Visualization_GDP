@@ -10,7 +10,7 @@ var iText,iChords,eText,eChords;
 var angleRange=320,
     baseYear=2001,
     maxMonth=1,
-    maxYear=4,
+    maxYear=3,
     monthOffset=(monthWidth)/(maxYear*12+maxMonth),
     countries,
     e_labels=[],

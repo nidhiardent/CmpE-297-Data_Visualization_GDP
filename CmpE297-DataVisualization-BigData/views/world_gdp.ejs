@@ -37,7 +37,506 @@
 	<link rel="shortcut icon" href="img/favicon.ico">
 	<!-- end: Favicon -->
 	
-		
+	<script type="text/javascript" src="http://www.amcharts.com/lib/3/ammap.js"></script>
+	<script type="text/javascript" src="http://www.amcharts.com/lib/3/maps/js/worldLow.js"></script>
+	<script type="text/javascript" src="http://www.amcharts.com/lib/3/themes/dark.js"></script>
+	
+	<style>
+	#chartdiv {background: #3f3f4f;color:#ffffff;	
+	width		: 100%;
+	height		: 500px;
+	font-size	: 11px;
+	}
+	</style>
+	<script>
+/*
+	although ammap has methos like getAreaCenterLatitude and getAreaCenterLongitude,
+	they are not suitable in quite a lot of cases as the center of some countries
+	is even outside the country itself (like US, because of Alaska and Hawaii)
+	That's why wehave the coordinates stored here
+*/
+
+var latlong = {};
+latlong["AD"] = {"latitude":42.5, "longitude":1.5};
+latlong["AE"] = {"latitude":24, "longitude":54};
+latlong["AF"] = {"latitude":33, "longitude":65};
+latlong["AG"] = {"latitude":17.05, "longitude":-61.8};
+latlong["AI"] = {"latitude":18.25, "longitude":-63.1667};
+latlong["AL"] = {"latitude":41, "longitude":20};
+latlong["AM"] = {"latitude":40, "longitude":45};
+latlong["AN"] = {"latitude":12.25, "longitude":-68.75};
+latlong["AO"] = {"latitude":-12.5, "longitude":18.5};
+latlong["AP"] = {"latitude":35, "longitude":105};
+latlong["AQ"] = {"latitude":-90, "longitude":0};
+latlong["AR"] = {"latitude":-34, "longitude":-64};
+latlong["AS"] = {"latitude":-14.3333, "longitude":-170};
+latlong["AT"] = {"latitude":47.3333, "longitude":13.3333};
+latlong["AU"] = {"latitude":-27, "longitude":133};
+latlong["AW"] = {"latitude":12.5, "longitude":-69.9667};
+latlong["AZ"] = {"latitude":40.5, "longitude":47.5};
+latlong["BA"] = {"latitude":44, "longitude":18};
+latlong["BB"] = {"latitude":13.1667, "longitude":-59.5333};
+latlong["BD"] = {"latitude":24, "longitude":90};
+latlong["BE"] = {"latitude":50.8333, "longitude":4};
+latlong["BF"] = {"latitude":13, "longitude":-2};
+latlong["BG"] = {"latitude":43, "longitude":25};
+latlong["BH"] = {"latitude":26, "longitude":50.55};
+latlong["BI"] = {"latitude":-3.5, "longitude":30};
+latlong["BJ"] = {"latitude":9.5, "longitude":2.25};
+latlong["BM"] = {"latitude":32.3333, "longitude":-64.75};
+latlong["BN"] = {"latitude":4.5, "longitude":114.6667};
+latlong["BO"] = {"latitude":-17, "longitude":-65};
+latlong["BR"] = {"latitude":-10, "longitude":-55};
+latlong["BS"] = {"latitude":24.25, "longitude":-76};
+latlong["BT"] = {"latitude":27.5, "longitude":90.5};
+latlong["BV"] = {"latitude":-54.4333, "longitude":3.4};
+latlong["BW"] = {"latitude":-22, "longitude":24};
+latlong["BY"] = {"latitude":53, "longitude":28};
+latlong["BZ"] = {"latitude":17.25, "longitude":-88.75};
+latlong["CA"] = {"latitude":54, "longitude":-100};
+latlong["CC"] = {"latitude":-12.5, "longitude":96.8333};
+latlong["CD"] = {"latitude":0, "longitude":25};
+latlong["CF"] = {"latitude":7, "longitude":21};
+latlong["CG"] = {"latitude":-1, "longitude":15};
+latlong["CH"] = {"latitude":47, "longitude":8};
+latlong["CI"] = {"latitude":8, "longitude":-5};
+latlong["CK"] = {"latitude":-21.2333, "longitude":-159.7667};
+latlong["CL"] = {"latitude":-30, "longitude":-71};
+latlong["CM"] = {"latitude":6, "longitude":12};
+latlong["CN"] = {"latitude":35, "longitude":105};
+latlong["CO"] = {"latitude":4, "longitude":-72};
+latlong["CR"] = {"latitude":10, "longitude":-84};
+latlong["CU"] = {"latitude":21.5, "longitude":-80};
+latlong["CV"] = {"latitude":16, "longitude":-24};
+latlong["CX"] = {"latitude":-10.5, "longitude":105.6667};
+latlong["CY"] = {"latitude":35, "longitude":33};
+latlong["CZ"] = {"latitude":49.75, "longitude":15.5};
+latlong["DE"] = {"latitude":51, "longitude":9};
+latlong["DJ"] = {"latitude":11.5, "longitude":43};
+latlong["DK"] = {"latitude":56, "longitude":10};
+latlong["DM"] = {"latitude":15.4167, "longitude":-61.3333};
+latlong["DO"] = {"latitude":19, "longitude":-70.6667};
+latlong["DZ"] = {"latitude":28, "longitude":3};
+latlong["EC"] = {"latitude":-2, "longitude":-77.5};
+latlong["EE"] = {"latitude":59, "longitude":26};
+latlong["EG"] = {"latitude":27, "longitude":30};
+latlong["EH"] = {"latitude":24.5, "longitude":-13};
+latlong["ER"] = {"latitude":15, "longitude":39};
+latlong["ES"] = {"latitude":40, "longitude":-4};
+latlong["ET"] = {"latitude":8, "longitude":38};
+latlong["EU"] = {"latitude":47, "longitude":8};
+latlong["FI"] = {"latitude":62, "longitude":26};
+latlong["FJ"] = {"latitude":-18, "longitude":175};
+latlong["FK"] = {"latitude":-51.75, "longitude":-59};
+latlong["FM"] = {"latitude":6.9167, "longitude":158.25};
+latlong["FO"] = {"latitude":62, "longitude":-7};
+latlong["FR"] = {"latitude":46, "longitude":2};
+latlong["GA"] = {"latitude":-1, "longitude":11.75};
+latlong["GB"] = {"latitude":54, "longitude":-2};
+latlong["GD"] = {"latitude":12.1167, "longitude":-61.6667};
+latlong["GE"] = {"latitude":42, "longitude":43.5};
+latlong["GF"] = {"latitude":4, "longitude":-53};
+latlong["GH"] = {"latitude":8, "longitude":-2};
+latlong["GI"] = {"latitude":36.1833, "longitude":-5.3667};
+latlong["GL"] = {"latitude":72, "longitude":-40};
+latlong["GM"] = {"latitude":13.4667, "longitude":-16.5667};
+latlong["GN"] = {"latitude":11, "longitude":-10};
+latlong["GP"] = {"latitude":16.25, "longitude":-61.5833};
+latlong["GQ"] = {"latitude":2, "longitude":10};
+latlong["GR"] = {"latitude":39, "longitude":22};
+latlong["GS"] = {"latitude":-54.5, "longitude":-37};
+latlong["GT"] = {"latitude":15.5, "longitude":-90.25};
+latlong["GU"] = {"latitude":13.4667, "longitude":144.7833};
+latlong["GW"] = {"latitude":12, "longitude":-15};
+latlong["GY"] = {"latitude":5, "longitude":-59};
+latlong["HK"] = {"latitude":22.25, "longitude":114.1667};
+latlong["HM"] = {"latitude":-53.1, "longitude":72.5167};
+latlong["HN"] = {"latitude":15, "longitude":-86.5};
+latlong["HR"] = {"latitude":45.1667, "longitude":15.5};
+latlong["HT"] = {"latitude":19, "longitude":-72.4167};
+latlong["HU"] = {"latitude":47, "longitude":20};
+latlong["ID"] = {"latitude":-5, "longitude":120};
+latlong["IE"] = {"latitude":53, "longitude":-8};
+latlong["IL"] = {"latitude":31.5, "longitude":34.75};
+latlong["IN"] = {"latitude":20, "longitude":77};
+latlong["IO"] = {"latitude":-6, "longitude":71.5};
+latlong["IQ"] = {"latitude":33, "longitude":44};
+latlong["IR"] = {"latitude":32, "longitude":53};
+latlong["IS"] = {"latitude":65, "longitude":-18};
+latlong["IT"] = {"latitude":42.8333, "longitude":12.8333};
+latlong["JM"] = {"latitude":18.25, "longitude":-77.5};
+latlong["JO"] = {"latitude":31, "longitude":36};
+latlong["JP"] = {"latitude":36, "longitude":138};
+latlong["KE"] = {"latitude":1, "longitude":38};
+latlong["KG"] = {"latitude":41, "longitude":75};
+latlong["KH"] = {"latitude":13, "longitude":105};
+latlong["KI"] = {"latitude":1.4167, "longitude":173};
+latlong["KM"] = {"latitude":-12.1667, "longitude":44.25};
+latlong["KN"] = {"latitude":17.3333, "longitude":-62.75};
+latlong["KP"] = {"latitude":40, "longitude":127};
+latlong["KR"] = {"latitude":37, "longitude":127.5};
+latlong["KW"] = {"latitude":29.3375, "longitude":47.6581};
+latlong["KY"] = {"latitude":19.5, "longitude":-80.5};
+latlong["KZ"] = {"latitude":48, "longitude":68};
+latlong["LA"] = {"latitude":18, "longitude":105};
+latlong["LB"] = {"latitude":33.8333, "longitude":35.8333};
+latlong["LC"] = {"latitude":13.8833, "longitude":-61.1333};
+latlong["LI"] = {"latitude":47.1667, "longitude":9.5333};
+latlong["LK"] = {"latitude":7, "longitude":81};
+latlong["LR"] = {"latitude":6.5, "longitude":-9.5};
+latlong["LS"] = {"latitude":-29.5, "longitude":28.5};
+latlong["LT"] = {"latitude":55, "longitude":24};
+latlong["LU"] = {"latitude":49.75, "longitude":6};
+latlong["LV"] = {"latitude":57, "longitude":25};
+latlong["LY"] = {"latitude":25, "longitude":17};
+latlong["MA"] = {"latitude":32, "longitude":-5};
+latlong["MC"] = {"latitude":43.7333, "longitude":7.4};
+latlong["MD"] = {"latitude":47, "longitude":29};
+latlong["ME"] = {"latitude":42.5, "longitude":19.4};
+latlong["MG"] = {"latitude":-20, "longitude":47};
+latlong["MH"] = {"latitude":9, "longitude":168};
+latlong["MK"] = {"latitude":41.8333, "longitude":22};
+latlong["ML"] = {"latitude":17, "longitude":-4};
+latlong["MM"] = {"latitude":22, "longitude":98};
+latlong["MN"] = {"latitude":46, "longitude":105};
+latlong["MO"] = {"latitude":22.1667, "longitude":113.55};
+latlong["MP"] = {"latitude":15.2, "longitude":145.75};
+latlong["MQ"] = {"latitude":14.6667, "longitude":-61};
+latlong["MR"] = {"latitude":20, "longitude":-12};
+latlong["MS"] = {"latitude":16.75, "longitude":-62.2};
+latlong["MT"] = {"latitude":35.8333, "longitude":14.5833};
+latlong["MU"] = {"latitude":-20.2833, "longitude":57.55};
+latlong["MV"] = {"latitude":3.25, "longitude":73};
+latlong["MW"] = {"latitude":-13.5, "longitude":34};
+latlong["MX"] = {"latitude":23, "longitude":-102};
+latlong["MY"] = {"latitude":2.5, "longitude":112.5};
+latlong["MZ"] = {"latitude":-18.25, "longitude":35};
+latlong["NA"] = {"latitude":-22, "longitude":17};
+latlong["NC"] = {"latitude":-21.5, "longitude":165.5};
+latlong["NE"] = {"latitude":16, "longitude":8};
+latlong["NF"] = {"latitude":-29.0333, "longitude":167.95};
+latlong["NG"] = {"latitude":10, "longitude":8};
+latlong["NI"] = {"latitude":13, "longitude":-85};
+latlong["NL"] = {"latitude":52.5, "longitude":5.75};
+latlong["NO"] = {"latitude":62, "longitude":10};
+latlong["NP"] = {"latitude":28, "longitude":84};
+latlong["NR"] = {"latitude":-0.5333, "longitude":166.9167};
+latlong["NU"] = {"latitude":-19.0333, "longitude":-169.8667};
+latlong["NZ"] = {"latitude":-41, "longitude":174};
+latlong["OM"] = {"latitude":21, "longitude":57};
+latlong["PA"] = {"latitude":9, "longitude":-80};
+latlong["PE"] = {"latitude":-10, "longitude":-76};
+latlong["PF"] = {"latitude":-15, "longitude":-140};
+latlong["PG"] = {"latitude":-6, "longitude":147};
+latlong["PH"] = {"latitude":13, "longitude":122};
+latlong["PK"] = {"latitude":30, "longitude":70};
+latlong["PL"] = {"latitude":52, "longitude":20};
+latlong["PM"] = {"latitude":46.8333, "longitude":-56.3333};
+latlong["PR"] = {"latitude":18.25, "longitude":-66.5};
+latlong["PS"] = {"latitude":32, "longitude":35.25};
+latlong["PT"] = {"latitude":39.5, "longitude":-8};
+latlong["PW"] = {"latitude":7.5, "longitude":134.5};
+latlong["PY"] = {"latitude":-23, "longitude":-58};
+latlong["QA"] = {"latitude":25.5, "longitude":51.25};
+latlong["RE"] = {"latitude":-21.1, "longitude":55.6};
+latlong["RO"] = {"latitude":46, "longitude":25};
+latlong["RS"] = {"latitude":44, "longitude":21};
+latlong["RU"] = {"latitude":60, "longitude":100};
+latlong["RW"] = {"latitude":-2, "longitude":30};
+latlong["SA"] = {"latitude":25, "longitude":45};
+latlong["SB"] = {"latitude":-8, "longitude":159};
+latlong["SC"] = {"latitude":-4.5833, "longitude":55.6667};
+latlong["SD"] = {"latitude":15, "longitude":30};
+latlong["SE"] = {"latitude":62, "longitude":15};
+latlong["SG"] = {"latitude":1.3667, "longitude":103.8};
+latlong["SH"] = {"latitude":-15.9333, "longitude":-5.7};
+latlong["SI"] = {"latitude":46, "longitude":15};
+latlong["SJ"] = {"latitude":78, "longitude":20};
+latlong["SK"] = {"latitude":48.6667, "longitude":19.5};
+latlong["SL"] = {"latitude":8.5, "longitude":-11.5};
+latlong["SM"] = {"latitude":43.7667, "longitude":12.4167};
+latlong["SN"] = {"latitude":14, "longitude":-14};
+latlong["SO"] = {"latitude":10, "longitude":49};
+latlong["SR"] = {"latitude":4, "longitude":-56};
+latlong["ST"] = {"latitude":1, "longitude":7};
+latlong["SV"] = {"latitude":13.8333, "longitude":-88.9167};
+latlong["SY"] = {"latitude":35, "longitude":38};
+latlong["SZ"] = {"latitude":-26.5, "longitude":31.5};
+latlong["TC"] = {"latitude":21.75, "longitude":-71.5833};
+latlong["TD"] = {"latitude":15, "longitude":19};
+latlong["TF"] = {"latitude":-43, "longitude":67};
+latlong["TG"] = {"latitude":8, "longitude":1.1667};
+latlong["TH"] = {"latitude":15, "longitude":100};
+latlong["TJ"] = {"latitude":39, "longitude":71};
+latlong["TK"] = {"latitude":-9, "longitude":-172};
+latlong["TM"] = {"latitude":40, "longitude":60};
+latlong["TN"] = {"latitude":34, "longitude":9};
+latlong["TO"] = {"latitude":-20, "longitude":-175};
+latlong["TR"] = {"latitude":39, "longitude":35};
+latlong["TT"] = {"latitude":11, "longitude":-61};
+latlong["TV"] = {"latitude":-8, "longitude":178};
+latlong["TW"] = {"latitude":23.5, "longitude":121};
+latlong["TZ"] = {"latitude":-6, "longitude":35};
+latlong["UA"] = {"latitude":49, "longitude":32};
+latlong["UG"] = {"latitude":1, "longitude":32};
+latlong["UM"] = {"latitude":19.2833, "longitude":166.6};
+latlong["US"] = {"latitude":38, "longitude":-97};
+latlong["UY"] = {"latitude":-33, "longitude":-56};
+latlong["UZ"] = {"latitude":41, "longitude":64};
+latlong["VA"] = {"latitude":41.9, "longitude":12.45};
+latlong["VC"] = {"latitude":13.25, "longitude":-61.2};
+latlong["VE"] = {"latitude":8, "longitude":-66};
+latlong["VG"] = {"latitude":18.5, "longitude":-64.5};
+latlong["VI"] = {"latitude":18.3333, "longitude":-64.8333};
+latlong["VN"] = {"latitude":16, "longitude":106};
+latlong["VU"] = {"latitude":-16, "longitude":167};
+latlong["WF"] = {"latitude":-13.3, "longitude":-176.2};
+latlong["WS"] = {"latitude":-13.5833, "longitude":-172.3333};
+latlong["YE"] = {"latitude":15, "longitude":48};
+latlong["YT"] = {"latitude":-12.8333, "longitude":45.1667};
+latlong["ZA"] = {"latitude":-29, "longitude":24};
+latlong["ZM"] = {"latitude":-15, "longitude":30};
+latlong["ZW"] = {"latitude":-20, "longitude":30};
+
+
+var mapData = [
+{"code":"AF" , "name":"Afghanistan", "value":<%- JSON.stringify(AF) %>, "color":"#eea638"},
+{"code":"AL" , "name":"Albania", "value":<%- JSON.stringify(AL) %>, "color":"#d8854f"},
+{"code":"DZ" , "name":"Algeria", "value":<%- JSON.stringify(DZ) %>, "color":"#de4c4f"},
+{"code":"AO" , "name":"Angola", "value":<%- JSON.stringify(AO) %>, "color":"#de4c4f"},
+{"code":"AR" , "name":"Argentina", "value":<%- JSON.stringify(AR) %>, "color":"#86a965"},
+{"code":"AM" , "name":"Armenia", "value":<%- JSON.stringify(AM) %>, "color":"#d8854f"},
+{"code":"AU" , "name":"Australia", "value":<%- JSON.stringify(AU) %>, "color":"#8aabb0"},
+{"code":"AT" , "name":"Austria", "value":<%- JSON.stringify(AT) %>, "color":"#d8854f"},
+{"code":"AZ" , "name":"Azerbaijan", "value":<%- JSON.stringify(AZ) %>, "color":"#d8854f"},
+{"code":"BH" , "name":"Bahrain", "value":<%- JSON.stringify(BH) %>, "color":"#eea638"},
+{"code":"BD" , "name":"Bangladesh", "value":<%- JSON.stringify(BD) %>, "color":"#eea638"},
+{"code":"BY" , "name":"Belarus", "value":<%- JSON.stringify(BY) %>, "color":"#d8854f"},
+{"code":"BE" , "name":"Belgium", "value":<%- JSON.stringify(BE) %>, "color":"#d8854f"},
+{"code":"BJ" , "name":"Benin", "value":<%- JSON.stringify(BJ) %>, "color":"#de4c4f"},
+{"code":"BT" , "name":"Bhutan", "value":<%- JSON.stringify(BT) %>, "color":"#eea638"},
+{"code":"BO" , "name":"Bolivia", "value":<%- JSON.stringify(BO) %>, "color":"#86a965"},
+{"code":"BA" , "name":"Bosnia and Herzegovina", "value":<%- JSON.stringify(BA) %>, "color":"#d8854f"},
+{"code":"BW" , "name":"Botswana", "value":<%- JSON.stringify(BW) %>, "color":"#de4c4f"},
+{"code":"BR" , "name":"Brazil", "value":<%- JSON.stringify(BR) %>, "color":"#86a965"},
+{"code":"BN" , "name":"Brunei", "value":405938, "color":"#eea638"},
+{"code":"BN" , "name":"Bulgaria", "value":453120, "color":"#d8854f"},
+{"code":"BF" , "name":"Burkina Faso", "value":<%- JSON.stringify(BF) %>, "color":"#de4c4f"},
+{"code":"BI" , "name":"Burundi", "value":<%- JSON.stringify(BI) %>, "color":"#de4c4f"},
+{"code":"KH" , "name":"Cambodia", "value":<%- JSON.stringify(KH) %>, "color":"#eea638"},
+{"code":"CM" , "name":"Cameroon", "value":<%- JSON.stringify(CM) %>, "color":"#de4c4f"},
+{"code":"CA" , "name":"Canada", "value":<%- JSON.stringify(CA) %>, "color":"#a7a737"},
+{"code":"CV" , "name":"Cape Verde", "value":325698, "color":"#de4c4f"},
+{"code":"CF" , "name":"Central African Rep.", "value":<%- JSON.stringify(CF) %>, "color":"#de4c4f"},
+{"code":"TD" , "name":"Chad", "value":<%- JSON.stringify(TD) %>, "color":"#de4c4f"},
+{"code":"CL" , "name":"Chile", "value":<%- JSON.stringify(CL) %>, "color":"#86a965"},
+{"code":"CN" , "name":"China", "value":<%- JSON.stringify(CN) %>, "color":"#eea638"},
+{"code":"CO" , "name":"Colombia", "value":<%- JSON.stringify(CO) %>, "color":"#86a965"},
+{"code":"KM" , "name":"Comoros", "value":<%- JSON.stringify(KM) %>, "color":"#de4c4f"},
+{"code":"CD" , "name":"Congo, Dem. Rep.", "value":67757577, "color":"#de4c4f"},
+{"code":"CG" , "name":"Congo, Rep.", "value":<%- JSON.stringify(CG) %>, "color":"#de4c4f"},
+{"code":"CR" , "name":"Costa Rica", "value":<%- JSON.stringify(CR) %>, "color":"#a7a737"},
+{"code":"CI" , "name":"Cote d'Ivoire", "value":20152894, "color":"#de4c4f"},
+{"code":"HR" , "name":"Croatia", "value":<%- JSON.stringify(HR) %>, "color":"#d8854f"},
+{"code":"CU" , "name":"Cuba", "value":<%- JSON.stringify(CU) %>, "color":"#a7a737"},
+{"code":"CY" , "name":"Cyprus", "value":<%- JSON.stringify(CY) %>, "color":"#d8854f"},
+{"code":"CZ" , "name":"Czech Rep.", "value":10534293, "color":"#d8854f"},
+{"code":"DK" , "name":"Denmark", "value":<%- JSON.stringify(DK) %>, "color":"#d8854f"},
+{"code":"DJ" , "name":"Djibouti", "value":<%- JSON.stringify(DJ) %>, "color":"#de4c4f"},
+{"code":"DO" , "name":"Dominican Rep.", "value":<%- JSON.stringify(DO) %>, "color":"#a7a737"},
+{"code":"EC" , "name":"Ecuador", "value":<%- JSON.stringify(EC) %>, "color":"#86a965"},
+{"code":"EG" , "name":"Egypt", "value":<%- JSON.stringify(EG) %>, "color":"#de4c4f"},
+{"code":"SV" , "name":"El Salvador", "value":<%- JSON.stringify(SV) %>, "color":"#a7a737"},
+{"code":"GQ" , "name":"Equatorial Guinea", "value":<%- JSON.stringify(GQ) %>, "color":"#de4c4f"},
+{"code":"ER" , "name":"Eritrea", "value":<%- JSON.stringify(ER) %>, "color":"#de4c4f"},
+{"code":"EE" , "name":"Estonia", "value":<%- JSON.stringify(EE) %>, "color":"#d8854f"},
+{"code":"ET" , "name":"Ethiopia", "value":<%- JSON.stringify(ET) %>, "color":"#de4c4f"},
+{"code":"FJ" , "name":"Fiji", "value":<%- JSON.stringify(FJ) %>, "color":"#8aabb0"},
+{"code":"FI" , "name":"Finland", "value":<%- JSON.stringify(FI) %>, "color":"#d8854f"},
+{"code":"FR" , "name":"France", "value":<%- JSON.stringify(FR) %>, "color":"#d8854f"},
+{"code":"GA" , "name":"Gabon", "value":<%- JSON.stringify(GA) %>, "color":"#de4c4f"},
+{"code":"GM" , "name":"Gambia", "value":<%- JSON.stringify(GM) %>, "color":"#de4c4f"},
+{"code":"GE" , "name":"Georgia", "value":<%- JSON.stringify(GE) %>, "color":"#d8854f"},
+{"code":"DE" , "name":"Germany", "value":<%- JSON.stringify(DE) %>, "color":"#d8854f"},
+{"code":"GH" , "name":"Ghana", "value":<%- JSON.stringify(GH) %>, "color":"#de4c4f"},
+{"code":"GR" , "name":"Greece", "value":<%- JSON.stringify(GR) %>, "color":"#d8854f"},
+{"code":"GT" , "name":"Guatemala", "value":<%- JSON.stringify(GT) %>, "color":"#a7a737"},
+{"code":"GN" , "name":"Guinea", "value":<%- JSON.stringify(GN) %>, "color":"#de4c4f"},
+{"code":"GW" , "name":"Guinea-Bissau", "value":<%- JSON.stringify(GW) %>, "color":"#de4c4f"},
+{"code":"GY" , "name":"Guyana", "value":<%- JSON.stringify(GY) %>, "color":"#86a965"},
+{"code":"HT" , "name":"Haiti", "value":<%- JSON.stringify(HT) %>, "color":"#a7a737"},
+{"code":"HN" , "name":"Honduras", "value":<%- JSON.stringify(HN) %>, "color":"#a7a737"},
+{"code":"HK" , "name":"Hong Kong, China", "value":7122187, "color":"#eea638"},
+{"code":"HU" , "name":"Hungary", "value":<%- JSON.stringify(HU) %>, "color":"#d8854f"},
+{"code":"IS" , "name":"Iceland", "value":<%- JSON.stringify(IS) %>, "color":"#d8854f"},
+{"code":"IN" , "name":"India", "value":<%- JSON.stringify(IN) %>, "color":"#eea638"},
+{"code":"ID" , "name":"Indonesia", "value":<%- JSON.stringify(ID) %>, "color":"#eea638"},
+{"code":"IR" , "name":"Iran", "value":<%- JSON.stringify(IR) %>, "color":"#eea638"},
+{"code":"IQ" , "name":"Iraq", "value":<%- JSON.stringify(IQ) %>, "color":"#eea638"},
+{"code":"IE" , "name":"Ireland", "value":<%- JSON.stringify(IE) %>, "color":"#d8854f"},
+{"code":"IL" , "name":"Israel", "value":<%- JSON.stringify(IL) %>, "color":"#eea638"},
+{"code":"IT" , "name":"Italy", "value":<%- JSON.stringify(IT) %>, "color":"#d8854f"},
+{"code":"JM" , "name":"Jamaica", "value":<%- JSON.stringify(JM) %>, "color":"#a7a737"},
+{"code":"JP" , "name":"Japan", "value":<%- JSON.stringify(JP) %>, "color":"#eea638"},
+{"code":"JO" , "name":"Jordan", "value":<%- JSON.stringify(JO) %>, "color":"#eea638"},
+{"code":"KZ" , "name":"Kazakhstan", "value":16206750, "color":"#eea638"},
+{"code":"KE" , "name":"Kenya", "value":<%- JSON.stringify(KE) %>, "color":"#de4c4f"},
+{"code":"KP" , "name":"Korea, Dem. Rep.", "value":24451285, "color":"#eea638"},
+{"code":"KR" , "name":"Korea, Rep.", "value":48391343, "color":"#eea638"},
+{"code":"KW" , "name":"Kuwait", "value":<%- JSON.stringify(KW) %>, "color":"#eea638"},
+{"code":"KG" , "name":"Kyrgyzstan", "value":<%- JSON.stringify(KG) %>, "color":"#eea638"},
+{"code":"LA" , "name":"Laos", "value":6288037, "color":"#eea638"},
+{"code":"LV" , "name":"Latvia", "value":<%- JSON.stringify(LV) %>, "color":"#d8854f"},
+{"code":"LB" , "name":"Lebanon", "value":<%- JSON.stringify(LB) %>, "color":"#eea638"},
+{"code":"LS" , "name":"Lesotho", "value":<%- JSON.stringify(LS) %>, "color":"#de4c4f"},
+{"code":"LR" , "name":"Liberia", "value":<%- JSON.stringify(LR) %>, "color":"#de4c4f"},
+{"code":"LY" , "name":"Libya", "value":<%- JSON.stringify(LY) %>, "color":"#de4c4f"},
+{"code":"LT" , "name":"Lithuania", "value":	<%- JSON.stringify(LT) %>, "color":"#d8854f"},
+{"code":"LU" , "name":"Luxembourg", "value":<%- JSON.stringify(LU) %>, "color":"#d8854f"},
+{"code":"MK" , "name":"Macedonia, FYR", "value":2063893, "color":"#d8854f"},
+{"code":"MG" , "name":"Madagascar", "value":<%- JSON.stringify(MG) %>, "color":"#de4c4f"},
+{"code":"MW" , "name":"Malawi", "value":<%- JSON.stringify(MW) %>, "color":"#de4c4f"},
+{"code":"MY" , "name":"Malaysia", "value":<%- JSON.stringify(MY) %>, "color":"#eea638"},
+{"code":"ML" , "name":"Mali", "value":<%- JSON.stringify(ML) %>, "color":"#de4c4f"},
+{"code":"MR" , "name":"Mauritania", "value":<%- JSON.stringify(MR) %>, "color":"#de4c4f"},
+{"code":"MU" , "name":"Mauritius", "value":<%- JSON.stringify(MU) %>, "color":"#de4c4f"},
+{"code":"MX" , "name":"Mexico", "value":<%- JSON.stringify(MX) %>, "color":"#a7a737"},
+{"code":"MD" , "name":"Moldova", "value":3544864, "color":"#d8854f"},
+{"code":"MN" , "name":"Mongolia", "value":<%- JSON.stringify(MN) %>, "color":"#eea638"},
+{"code":"ME" , "name":"Montenegro", "value":<%- JSON.stringify(ME) %>, "color":"#d8854f"},
+{"code":"MA" , "name":"Morocco", "value":<%- JSON.stringify(MA) %>, "color":"#de4c4f"},
+{"code":"MZ" , "name":"Mozambique", "value":<%- JSON.stringify(MZ) %>, "color":"#de4c4f"},
+{"code":"MM" , "name":"Myanmar", "value":<%- JSON.stringify(MM) %>, "color":"#eea638"},
+{"code":"NA" , "name":"Namibia", "value":<%- JSON.stringify(NA) %>, "color":"#de4c4f"},
+{"code":"NP" , "name":"Nepal", "value":<%- JSON.stringify(NP) %>, "color":"#eea638"},
+{"code":"NL" , "name":"Netherlands", "value":<%- JSON.stringify(NL) %>, "color":"#d8854f"},
+{"code":"NZ" , "name":"New Zealand", "value":<%- JSON.stringify(NZ) %>, "color":"#8aabb0"},
+{"code":"NI" , "name":"Nicaragua", "value":<%- JSON.stringify(NI) %>, "color":"#a7a737"},
+{"code":"NE" , "name":"Niger", "value":<%- JSON.stringify(NE) %>, "color":"#de4c4f"},
+{"code":"NG" , "name":"Nigeria", "value":<%- JSON.stringify(NG) %>, "color":"#de4c4f"},
+{"code":"NO" , "name":"Norway", "value":4924848, "color":"#d8854f"},
+{"code":"OM" , "name":"Oman", "value":<%- JSON.stringify(OM) %>, "color":"#eea638"},
+{"code":"PK" , "name":"Pakistan", "value":<%- JSON.stringify(PK) %>, "color":"#eea638"},
+{"code":"PA" , "name":"Panama", "value":<%- JSON.stringify(PA) %>, "color":"#a7a737"},
+{"code":"PG" , "name":"Papua New Guinea", "value":<%- JSON.stringify(PG) %>, "color":"#8aabb0"},
+{"code":"PY" , "name":"Paraguay", "value":<%- JSON.stringify(PY) %>, "color":"#86a965"},
+{"code":"PE" , "name":"Peru", "value":<%- JSON.stringify(PE) %>, "color":"#86a965"},
+{"code":"PH" , "name":"Philippines", "value":<%- JSON.stringify(PH) %>, "color":"#eea638"},
+{"code":"PL" , "name":"Poland", "value":<%- JSON.stringify(PL) %>, "color":"#d8854f"},
+{"code":"PT" , "name":"Portugal", "value":<%- JSON.stringify(PT) %>, "color":"#d8854f"},
+{"code":"PR" , "name":"Puerto Rico", "value":<%- JSON.stringify(PR) %>, "color":"#a7a737"},
+{"code":"QA" , "name":"Qatar", "value":<%- JSON.stringify(QA) %>, "color":"#eea638"},
+{"code":"RO" , "name":"Romania", "value":<%- JSON.stringify(RO) %>, "color":"#d8854f"},
+{"code":"RU" , "name":"Russia", "value":142835555, "color":"#d8854f"},
+{"code":"RW" , "name":"Rwanda", "value":<%- JSON.stringify(RW) %>, "color":"#de4c4f"},
+{"code":"SA" , "name":"Saudi Arabia", "value":<%- JSON.stringify(SA) %>, "color":"#eea638"},
+{"code":"SN" , "name":"Senegal", "value":<%- JSON.stringify(SN) %>, "color":"#de4c4f"},
+{"code":"RS" , "name":"Serbia", "value":<%- JSON.stringify(RS) %>, "color":"#d8854f"},
+{"code":"SL" , "name":"Sierra Leone", "value":<%- JSON.stringify(SL) %>, "color":"#de4c4f"},
+{"code":"SG" , "name":"Singapore", "value":<%- JSON.stringify(SG) %>, "color":"#eea638"},
+{"code":"SK" , "name":"Slovak Republic", "value":5471502, "color":"#d8854f"},
+{"code":"SI" , "name":"Slovenia", "value":2035012, "color":"#d8854f"},
+{"code":"SB" , "name":"Solomon Islands", "value":<%- JSON.stringify(SB) %>, "color":"#8aabb0"},
+{"code":"SO" , "name":"Somalia", "value":<%- JSON.stringify(SO) %>, "color":"#de4c4f"},
+{"code":"ZA" , "name":"South Africa", "value":<%- JSON.stringify(ZA) %>, "color":"#de4c4f"},
+{"code":"ES" , "name":"Spain", "value":<%- JSON.stringify(ES) %>, "color":"#d8854f"},
+{"code":"LK" , "name":"Sri Lanka", "value":<%- JSON.stringify(LK) %>, "color":"#eea638"},
+{"code":"SD" , "name":"Sudan", "value":<%- JSON.stringify(SD) %>, "color":"#de4c4f"},
+{"code":"SR" , "name":"Suriname", "value":529419, "color":"#86a965"},
+{"code":"SZ" , "name":"Swaziland", "value":<%- JSON.stringify(SZ) %>, "color":"#de4c4f"},
+{"code":"SE" , "name":"Sweden", "value":<%- JSON.stringify(SE) %>, "color":"#d8854f"},
+{"code":"CH" , "name":"Switzerland", "value":<%- JSON.stringify(CH) %>, "color":"#d8854f"},
+{"code":"SY" , "name":"Syria", "value":20766037, "color":"#eea638"},
+{"code":"TW" , "name":"Taiwan", "value":23072000, "color":"#eea638"},
+{"code":"TJ" , "name":"Tajikistan", "value":<%- JSON.stringify(TJ) %>, "color":"#eea638"},
+{"code":"TZ" , "name":"Tanzania", "value":46218486, "color":"#de4c4f"},
+{"code":"TH" , "name":"Thailand", "value":<%- JSON.stringify(TH) %>, "color":"#eea638"},
+{"code":"TG" , "name":"Togo", "value":<%- JSON.stringify(TG) %>, "color":"#de4c4f"},
+{"code":"TT" , "name":"Trinidad and Tobago", "value":<%- JSON.stringify(TT) %>, "color":"#a7a737"},
+{"code":"TN" , "name":"Tunisia", "value":<%- JSON.stringify(TN) %>, "color":"#de4c4f"},
+{"code":"TR" , "name":"Turkey", "value":<%- JSON.stringify(TR) %>, "color":"#d8854f"},
+{"code":"TM" , "name":"Turkmenistan", "value":<%- JSON.stringify(TM) %>, "color":"#eea638"},
+{"code":"UG" , "name":"Uganda", "value":<%- JSON.stringify(UG) %>, "color":"#de4c4f"},
+{"code":"UA" , "name":"Ukraine", "value":<%- JSON.stringify(UA) %>, "color":"#d8854f"},
+{"code":"AE" , "name":"United Arab Emirates", "value":<%- JSON.stringify(AE) %>, "color":"#eea638"},
+{"code":"GB" , "name":"United Kingdom", "value":62417431, "color":"#d8854f"},
+
+{"code":"US" , "name":"United States", "value":<%- JSON.stringify(US) %>, "color":"#a7a737"},
+{"code":"UY" , "name":"Uruguay", "value":<%- JSON.stringify(UY) %>, "color":"#86a965"},
+{"code":"UZ" , "name":"Uzbekistan", "value":<%- JSON.stringify(UZ) %>, "color":"#eea638"},
+{"code":"VE" , "name":"Venezuela", "value":<%- JSON.stringify(VE) %>, "color":"#86a965"},
+{"code":"PS" , "name":"West Bank and Gaza", "value":4152369, "color":"#eea638"},
+{"code":"VN" , "name":"Vietnam", "value":<%- JSON.stringify(VN) %>, "color":"#eea638"},
+{"code":"YE" , "name":"Yemen, Rep.", "value":<%- JSON.stringify(YE) %>, "color":"#eea638"},
+{"code":"ZM" , "name":"Zambia", "value":<%- JSON.stringify(ZM) %>, "color":"#de4c4f"},
+{"code":"ZW" , "name":"Zimbabwe", "value":<%- JSON.stringify(ZW) %>, "color":"#de4c4f"}];
+
+
+var map;
+var minBulletSize = 3;
+var maxBulletSize = 70;
+var min = Infinity;
+var max = -Infinity;
+
+
+// get min and max values
+for (var i = 0; i < mapData.length; i++) {
+	var value = mapData[i].value;
+	if (value < min) {
+		min = value;
+	}
+	if (value > max) {
+		max = value;
+	}
+}
+
+ // build map
+AmCharts.ready(function() {
+  	AmCharts.theme = AmCharts.themes.dark;
+	map = new AmCharts.AmMap();
+  	map.pathToImages = "http://www.amcharts.com/lib/3/images/";
+
+	map.addTitle("World GDP "+<%- JSON.stringify(year) %>, 14);
+	map.addTitle("Team Matrix", 11);
+	map.areasSettings = {
+		unlistedAreasColor: "#000000",
+		unlistedAreasAlpha: 0.1
+	};
+	map.imagesSettings.balloonText = "<span style='font-size:14px;'><b>[[title]]</b>: [[value]]</span>";
+
+	var dataProvider = {
+		mapVar: AmCharts.maps.worldLow,
+		images: []
+	}
+
+	// create circle for each country
+	for (var i = 0; i < mapData.length; i++) {
+		var dataItem = mapData[i];
+		var value = dataItem.value;
+		// calculate size of a bubble
+		var size = (value - min) / (max - min) * (maxBulletSize - minBulletSize) + minBulletSize;
+		if (size < minBulletSize) {
+			size = minBulletSize;
+		}
+		var id = dataItem.code;
+
+		dataProvider.images.push({
+			type: "circle",
+			width: size,
+			height: size,
+			color: dataItem.color,
+			longitude: latlong[id].longitude,
+			latitude: latlong[id].latitude,
+			title: dataItem.name,
+			value: value
+		});
+	}
+
+	map.dataProvider = dataProvider;
+
+	map.write("chartdiv");
+});
+	</script>	
 		
 		
 </head>
@@ -52,7 +551,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</a>
-				<a class="brand" href="index.html"><span>Metro</span></a>
+				<a class="brand" href="index.html"><span>Visualizarix</span></a>
 								
 				<!-- start: Header Menu -->		
 							<%include includes/header.ejs %>
@@ -89,285 +588,37 @@
 				</li>
 				<li>
 					<i class="icon-eye-open"></i>
-					<a href="#">UI Features</a>
+					<a href="#">World GDP</a>
 				</li>
 			</ul>
 	
 			<div class="row-fluid">	
 				<div class="box yellow span12">
 					<div class="box-header">
-						<h2><i class="halflings-icon tasks"></i><span class="break"></span>Sliders</h2>
+						<h2><i class="halflings-icon tasks"></i><span class="break"></span>World GDP</h2>
+
 					</div>
 					<div class="box-content">
-						<table class="table table-striped">
-							<tr>
-								<td>
-									<div class="slider sliderSimple"></div>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="slider sliderMin green"></div>
-									<div class="field_notice">Min: <span class="must sliderMinLabel">$180</span></div>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="slider sliderMax blue"></div>
-									<div class="field_notice">Max: <span class="must sliderMaxLabel">$280</span></div>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="slider sliderRange red"></div>
-									<div class="field_notice">Price Range: <span class="must sliderRangeLabel">$192 - $470</span></div>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div id="sliderVertical-1" class="sliderVertical greenDark"></div>
-									<div id="sliderVertical-2" class="sliderVertical greenLight"></div>
-									<div id="sliderVertical-3" class="sliderVertical pink"></div>
-									<div id="sliderVertical-4" class="sliderVertical pinkDark"></div>
-									<div id="sliderVertical-5" class="sliderVertical yellow"></div>
-									<div id="sliderVertical-6" class="sliderVertical purple"></div>
-									<div id="sliderVertical-7" class="sliderVertical blue"></div>
-									<div id="sliderVertical-8" class="sliderVertical blueDark"></div>
-									<div id="sliderVertical-9" class="sliderVertical blueLight"></div>
-									<div id="sliderVertical-10" class="sliderVertical orange"></div>
-									<div id="sliderVertical-11" class="sliderVertical orangeDark"></div>
-									<div id="sliderVertical-12" class="sliderVertical red"></div>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="slider sliderMin-1 green"></div>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="slider sliderMin-2 yellow"></div>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="slider sliderMin-3 pink"></div>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="slider sliderMin-4 red"></div>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="slider sliderMin-5 purple"></div>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="slider sliderMin-6 greenDark"></div>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="slider sliderMin-7 orange"></div>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="slider sliderMin-8 blue"></div>
-								</td>
-							</tr>
-						</table>
+						<form action = "process_world_gdp" method="post">
+							<h2><font size=6 color="blue"> Select year (default 2012)</font></h2>
+							<input type="text" name="year" id="year" list="yearList" class="dropdown-menu" placeholder="Select Year" required/>
+							<datalist id="yearList" autocomplete="on">
+								<% for(var i=2012;i>=1970;i--) { %>
+									<option value="<%=i%>"></option>
+								<% } %>	
+							</datalist>
+							<input type="submit" hidden/>
+						</form>
+						<div id="chartdiv"></div>
 					</div>	
 				</div><!--/span-->
 				
 			</div><!--/row-->
-			
-			<hr>
-			
-			<div class="row-fluid">	
+				<hr><hr>
+			<div class="row-fluid sortable">	
 				<div class="box blue span12">
-					<div class="box-header">
-						<h2><i class="halflings-icon hand-top"></i><span class="break"></span>Quick Buttons</h2>
-					</div>
-					<div class="box-content">
-						
-						<a class="quick-button span2">
-							<i class="icon-group"></i>
-							<p>Users</p>
-							<span class="notification blue">1.367</span>
-						</a>
-						<a class="quick-button span2">
-							<i class="icon-comments-alt"></i>
-							<p>Comments</p>
-							<span class="notification green">167</span>
-						</a>
-						<a class="quick-button span2">
-							<i class="icon-shopping-cart"></i>
-							<p>Orders</p>
-						</a>
-						<a class="quick-button span2">
-							<i class="icon-barcode"></i>
-							<p>Products</p>
-						</a>
-						<a class="quick-button span2">
-							<i class="icon-envelope"></i>
-							<p>Messages</p>
-						</a>
-						<a class="quick-button span2">
-							<i class="icon-calendar"></i>
-							<p>Calendar</p>
-							<span class="notification red">68</span>
-						</a>
-						<div class="clearfix"></div>
-					</div>	
-				</div><!--/span-->
-				
-			</div><!--/row-->
-			
-			<hr>
-			
-			<div class="row-fluid">	
-				<div class="box span12">
-					<div class="box-header">
-						<h2><i class="halflings-icon hand-top"></i><span class="break"></span>Small Quick Buttons</h2>
-					</div>
-					<div class="box-content">
-						
-						<a class="quick-button-small span1">
-							<i class="icon-group"></i>
-							<p>Users</p>
-							<span class="notification blue">7</span>
-						</a>
-						<a class="quick-button-small span1">
-							<i class="icon-comments-alt"></i>
-							<p>Comments</p>
-							<span class="notification green">4</span>
-						</a>
-						<a class="quick-button-small span1">
-							<i class="icon-shopping-cart"></i>
-							<p>Orders</p>
-						</a>
-						<a class="quick-button-small span1">
-							<i class="icon-barcode"></i>
-							<p>Products</p>
-						</a>
-						<a class="quick-button-small span1">
-							<i class="icon-envelope"></i>
-							<p>Messages</p>
-						</a>
-						<a class="quick-button-small span1">
-							<i class="icon-calendar"></i>
-							<p>Calendar</p>
-							<span class="notification red">8</span>
-						</a>
-						<a class="quick-button-small span1">
-							<i class="icon-beaker"></i>
-							<p>Projects</p>
-						</a>
-						<a class="quick-button-small span1">
-							<i class="icon-thumbs-up"></i>
-							<p>Likes</p>
-							<span class="notification green">1</span>
-						</a>
-						<a class="quick-button-small span1">
-							<i class="icon-heart-empty"></i>
-							<p>Favorites</p>
-						</a>
-						<a class="quick-button-small span1">
-							<i class="icon-bullhorn"></i>
-							<p>Notifications</p>
-							<span class="notification yellow">7</span>
-						</a>
-						<a class="quick-button-small span1">
-							<i class="icon-cogs"></i>
-							<p>Settings</p>
-						</a>
-						<a class="quick-button-small span1">
-							<i class="icon-dashboard"></i>
-							<p>Dashboard</p>
-						</a>
-						
-						<div class="clearfix"></div>
-					</div>	
-				</div><!--/span-->
-				
-			</div><!--/row-->
-			
-			<hr>
-			
-			<div class="row-fluid">	
-				<div class="box span12">
-					<div class="box-header">
-						<h2><i class="halflings-icon tasks"></i><span class="break"></span>Progress Bars</h2>
-					</div>
-					<div class="box-content">
-						<table class="table table-striped">
-							<tr>
-								<td>Basic</td>
-								<td>
-									<div class="progress simpleProgress blue">80</div>
-								</td>
-							</tr>
-							<tr>
-								<td>Progress</td>
-								<td>
-									<div class="progress progressAnimate yellow"></div>
-									<div class="field_notice">Value: <span class="must progressAnimateValue">0%</span></div>
-								</td>
-							</tr>
-							<tr>
-								<td>Upload</td>
-								<td>
-									<div class="progress progressUploadAnimate pink"></div>
-									<div class="field_notice">Uploading: <span class="must progressUploadAnimateValue">0 Mb</span> / 4096 Gb</div>
-								</td>
-							</tr>
-						</table>
-					</div>	
-				</div><!--/span-->
-				
-			</div><!--/row-->
-			
-			<hr>
-			
-			<div class="row-fluid">	
-				<div class="box span12">
-					<div class="box-header">
-						<h2><i class="halflings-icon tasks"></i><span class="break"></span>Skill Bars</h2>
-					</div>
-					<div class="box-content">
-						<ul class="skill-bar">
-				        	<li>
-				            	<h5>Web Design ( 40% )</h5>
-				            	<div class="meter yellow"><span style="width: 40%"></span></div><!-- Edite width here -->
-				          	</li>
-				          	<li>
-				            	<h5>Wordpress ( 80% )</h5>
-				            	<div class="meter blue"><span style="width: 80%"></span></div><!-- Edite width here -->
-				          	</li>
-				          	<li>
-				            	<h5>Branding ( 100% )</h5>
-				            	<div class="meter pink"><span style="width: 100%"></span></div><!-- Edite width here -->
-				          	</li>
-				          	<li>
-				            	<h5>SEO Optmization ( 60% )</h5>
-				            	<div class="meter green"><span style="width: 60%"></span></div><!-- Edite width here -->
-				          	</li>
-				      	</ul>
-					</div>	
-				</div><!--/span-->
-				
-			</div><!--/row-->
-			
-			<hr>
-			
-			<div class="row-fluid">	
-				<div class="box span12">
-					<div class="box-header">
-						<h2><i class="halflings-icon tasks"></i><span class="break"></span>Standard Progress Bars</h2>
+					<div class="box-header" data-original-title>
+						<h2><i class="halflings-icon user"></i><span class="break"></span>Countries and their corresponding GDP for Year <%- JSON.stringify(year) %></h2>
 						<div class="box-icon">
 							<a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
 							<a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
@@ -375,344 +626,399 @@
 						</div>
 					</div>
 					<div class="box-content">
-						<h3>Basic</h3>
-						<div class="progress">
-							<div class="bar" style="width: 70%;"></div>
-						</div>
-						<h3>Striped</h3>
-						<div class="progress progress-striped">
-							<div class="bar" style="width: 30%;"></div>
-						</div>
-						<h3>Animated</h3>
-						<div class="progress progress-striped progress-success active">
-							<div class="bar" style="width: 50%;"></div>
-						</div>
-						<h3>Additional Colors</h3>
-						<div class="progress progress-info progress-striped" style="margin-bottom: 9px;">
-							<div class="bar" style="width: 20%"></div>
-						</div>
-						<div class="progress progress-success" style="margin-bottom: 9px;">
-							<div class="bar" style="width: 40%"></div>
-						</div>
-						<div class="progress progress-warning progress-striped active" style="margin-bottom: 9px;">
-							<div class="bar" style="width: 60%"></div>
-						</div>
-						<div class="progress progress-danger progress-striped" style="margin-bottom: 9px;">
-							<div class="bar" style="width: 80%"></div>
-						</div>
-					</div>
-				</div><!--/span-->
-			</div><!--/row-->
-			
-			<hr>
-			
-			<div class="row-fluid">	
-				<div class="box span12">
-					
-					<div class="box-header">
-						<h2><i class="halflings-icon bullhorn"></i><span class="break"></span>Alerts</h2>
-						<div class="box-icon">
-							<a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
-							<a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
-							<a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
-						</div>
-					</div>
-					<div class="box-content alerts">
-						<div class="alert alert-error">
-							<button type="button" class="close" data-dismiss="alert">×</button>
-							<strong>Oh snap!</strong> Change a few things up and try submitting again.
-						</div>
-						<div class="alert alert-success">
-							<button type="button" class="close" data-dismiss="alert">×</button>
-							<strong>Well done!</strong> You successfully read this important alert message.
-						</div>
-						<div class="alert alert-info">
-							<button type="button" class="close" data-dismiss="alert">×</button>
-							<strong>Heads up!</strong> This alert needs your attention, but it's not super important.
-						</div>
-						<div class="alert alert-block ">
-							<button type="button" class="close" data-dismiss="alert">×</button>
-							<h4 class="alert-heading">Warning!</h4>
-							<p>Best check yo self, you're not looking too good. Nulla vitae elit libero, a pharetra augue. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
-						</div>
-					</div>
-					
-				</div><!--/span-->
-			</div><!--/row-->
-			
-			<hr>
-			
-			<div class="row-fluid">	
-				<div class="box span12">
-					
-					<div class="box-header">
-						<h2><i class="halflings-icon bell"></i><span class="break"></span>Growl Like Notifications</h2>
-						<div class="box-icon">
-							<a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
-							<a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
-							<a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
-						</div>
-					</div>
-					<div class="box-content">
-						<div class="alert alert-block">
-							<button type="button" class="close" data-dismiss="alert">×</button>
-							<h4 class="alert-heading">Attention!</h4>
-							<p>Click buttons below to see Pop Notifications.</p>
-						</div>
-						<p class="center">
-							<button class="btn btn-primary" id="add-regular"><i class="halflings-icon white bell"></i>Regular</button>
-							<button class="btn btn-primary" id="add-sticky"><i class="halflings-icon white bell"></i>Sticky</button>
-							<button class="btn btn-primary" id="add-without-image"><i class="halflings-icon white bell"></i>w/o image</button>
-							<button class="btn btn-primary" id="add-gritter-light"><i class="halflings-icon white bell"></i>White</button>
-							<button class="btn btn-primary" id="remove-all"><i class="halflings-icon white bell"></i>Remove All</button>
-						</p>
-					</div>
-					
-				</div><!--/span-->
-			</div><!--/row-->
-			
-			<hr>
-			
-			<div class="row-fluid">	
-				<div class="box span12">
-					
-					<div class="box-header">
-						<h2><i class="halflings-icon bell"></i><span class="break"></span>Bootstrap Notifications</h2>
-						<div class="box-icon">
-							<a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
-							<a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
-							<a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
-						</div>
-					</div>
-					<div class="box-content">
-						<div class="alert alert-block">
-							<button type="button" class="close" data-dismiss="alert">×</button>
-							<h4 class="alert-heading">Attention!</h4>
-							<p>Click buttons below to see Pop Notifications.</p>
-						</div>
-						<p class="center">
-							<button class="btn btn-primary noty" data-noty-options='{"text":"This is a success notification","layout":"topLeft","type":"success"}'><i class="halflings-icon white bell"></i> Top Left</button>
-							<button class="btn btn-primary noty" data-noty-options='{"text":"This is an alert notification with fade effect","layout":"topCenter","type":"alert","animateOpen": {"opacity": "show"}}'><i class="halflings-icon white bell"></i> Top Center (fade)</button>
-							<button class="btn btn-primary noty" data-noty-options='{"text":"This is an error notification","layout":"topRight","type":"error"}'><i class="halflings-icon white bell"></i> Top Right</button>
-							<button class="btn btn-primary noty" data-noty-options='{"text":"This is a success information","layout":"top","type":"information"}'><i class="halflings-icon white bell"></i> Top Full Width</button>
-							<button class="btn btn-primary noty" data-noty-options='{"text":"This is an alert notification with fade effect","layout":"center","type":"alert","animateOpen": {"opacity": "show"}}'><i class="halflings-icon white bell"></i> Center (fade)</button>
-							<button class="btn btn-primary noty" data-noty-options='{"text":"This is an error notification","layout":"center","type":"error"}'><i class="halflings-icon white bell"></i> Center</button>
-
-							<button class="btn btn-primary noty" data-noty-options='{"text":"This is an error notification","layout":"bottomLeft","type":"error"}'><i class="halflings-icon white bell"></i> Bottom Left</button>
-							<button class="btn btn-primary noty" data-noty-options='{"text":"This is an alert notification with fade effect","layout":"bottomRight","type":"alert","animateOpen": {"opacity": "show"}}'><i class="halflings-icon white bell"></i> Bottom Right (fade)</button>
-
-							<button class="btn btn-primary noty" data-noty-options='{"text":"This is an alert","layout":"bottom","type":"alert","closeButton":"true"}'><i class="halflings-icon white bell"></i> Bottom Full Width with Close Button</button>
-						</p>
-					</div>
-					
-				</div><!--/span-->
-			</div><!--/row-->
-			
-			<hr>
-			
-			<div class="row-fluid">	
-				<div class="box span4">
-					<div class="box-header">
-						<h2><i class="halflings-icon plus"></i><span class="break"></span>Extended Elements</h2>
-						<div class="box-icon">
-							<a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
-							<a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
-							<a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
-						</div>
-					</div>
-					<div class="box-content">
-						<table class="table table-bordered table-striped">
-							<tr>
-								<td>Star Rating</td>
-								<td>
-									<span class="rating">
-				                        <span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span>
-				                    </span>
-								</td>
-							</tr>
-							<tr>
-								<td>Popover</td>
-								<td>
-									<a href="#" class="btn btn-danger" data-rel="popover" data-content="And here's some amazing content. It's very engaging. right?" title="A Title">Hover for popover</a>
-								</td>
-							</tr>
-							<tr>
-								<td>Dialog</td>
-								<td>
-									<a href="#" class="btn btn-info btn-setting">Click for dialog</a>
-								</td>
-							</tr>
-							<tr>
-								<td>Tooltip</td>
-								<td>
-									<a href="#" title="Tooltip, you can change the position." data-rel="tooltip" class="btn btn-warning">Hover for tooltip</a>
-								</td>
-							</tr>
-						</table>
-					</div>	
-				</div><!--/span-->
-				
-				<div class="box span2">
-					<div class="box-header">
-						<h2><i class="halflings-icon eye-open"></i><span class="break"></span>Labels</h2>
-						<div class="box-icon">
-							<a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
-							<a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
-							<a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
-						</div>
-					</div>
-					<div class="box-content">
-						<table class="table table-bordered table-striped">
-							<tbody>
+						<table class="table table-striped table-bordered bootstrap-datatable datatable">
+						  <thead>
 							  <tr>
-								<td>
-								  <span class="label">Default</span>
-								</td>
+								  <th><font size=6 color="blue">Country</font></th>
+								  <th><font size=6 color="blue">GDP (in US Dollars)</font></th>
+								  
 							  </tr>
-							  <tr>
-								<td>
-								  <span class="label label-success">Success</span>
-								</td>
-							  </tr>
-							  <tr>
-								<td>
-								  <span class="label label-warning">Warning</span>
-								</td>
-							  </tr>
-							  <tr>
-								<td>
-								  <span class="label label-important">Important</span>
-								</td>
-							  </tr>
-							  <tr>
-								<td>
-								  <span class="label label-info">Info</span>
-								</td>
-							  </tr>
-							  <tr>
-								<td>
-								  <span class="label label-inverse">Inverse</span>
-								</td>
-							  </tr>
-							</tbody>
-						  </table>
-					</div>
-				</div><!--/span-->
-				
-				<div class="box span6">
-					<div class="box-header">
-						<h2><i class="halflings-icon list"></i><span class="break"></span>Buttons</h2>
-						<div class="box-icon">
-							<a href="#" class="btn-setting"><i class="halflings-icon wrench"></i></a>
-							<a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
-							<a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
-						</div>
-					</div>
-					<div class="box-content buttons">
-						<p>
-							<button class="btn btn-large">Large button</button>
-							<button class="btn btn-large btn-primary">Large button</button>
-							<button class="btn btn-large btn-danger">Large button</button>
-							<button class="btn btn-large btn-warning">Large button</button>
-						</p>
-						<p>
-							<button class="btn btn-large btn-success">Large button</button>
-							<button class="btn btn-large btn-info">Large button</button>
-							<button class="btn btn-large btn-inverse">Large button</button>
-						</p>
-						<p>
+						  </thead>   
+						  <tbody>
+							<tr><td class="center"><font size=5 color="black">Afghanistan</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(AF) %></font></td></tr>
 							
-						</p>
-						<div class="btn-group">
-							<button class="btn btn-large">Large Dropdown</button>
-							<button class="btn btn-large dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-							<ul class="dropdown-menu">
-								<li><a href="#"><i class="halflings-icon star"></i> Action</a></li>
-								<li><a href="#"><i class="halflings-icon tag"></i> Another action</a></li>
-								<li><a href="#"><i class="halflings-icon download-alt"></i> Something else here</a></li>
-								<li class="divider"></li>
-								<li><a href="#"><i class="halflings-icon tint"></i> Separated link</a></li>
-							</ul>
-						</div>
-						
-						<hr>
-						
-						<p class="btn-group">
-							  <button class="btn">Left</button>
-							  <button class="btn">Middle</button>
-							  <button class="btn">Right</button>
-						</p>
-						<p>
-							<button class="btn btn-small"><i class="halflings-icon white star"></i> Icon button</button>
-							<button class="btn btn-small btn-primary">Small button</button>
-							<button class="btn btn-small btn-danger">Small button</button>
-							<button class="btn btn-small btn-warning">Small button</button>
-							<button class="btn btn-small btn-success">Small button</button>
+							<tr><td class="center"><font size=5 color="black">Albania</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(AL) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Algeria</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(DZ) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Angola</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(AO) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Argentina</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(AR) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Armenia</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(AM) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Australia</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(AU) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Afghanistan</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(AF) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Austria</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(AT) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Azerbaijan</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(AZ) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Bahrain</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(BH) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Bangladesh</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(BD) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Belarus</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(BY) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Belgium</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(BE) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Benin</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(BJ) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Bhutan</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(BT) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Bolivia</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(BO) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Bosnia and Herzegovina</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(BA) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Botswana</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(BW) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Brazil</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(BR) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Brunei</font></td>
+							<td class="center"><font size=5 color="black">405938</font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Bulgaria</font></td>
+							<td class="center"><font size=5 color="black">453120</font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Burkina Faso</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(BF) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Burundi</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(BI) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Cambodia</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(KH) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Cameroon</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(CM) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Canada</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(CA) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Cape Verde</font></td>
+							<td class="center"><font size=5 color="black">325698</font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Central African Rep.</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(CF) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Brazil</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(BR) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Chad</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(TD) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Chile</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(CL) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Colombia</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(CO) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Comoros</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(KM) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Congo, Dem. Rep.</font></td>
+							<td class="center"><font size=5 color="black">67757577</font></td></tr>
+
+
+							<tr><td class="center"><font size=5 color="black">Congo, Rep.</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(CG) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Costa Rica</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(CR) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Cote d'Ivoire</font></td>
+							<td class="center"><font size=5 color="black">20152894</font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Croatia</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(HR) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Cuba</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(CU) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Cyprus</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(CY) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Denmark</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(DK) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Djibouti</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(DJ) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Dominican Rep.</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(DO) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Ecuador</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(EC) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Egypt</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(EG) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">El Salvador</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(SV) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Equatorial Guinea</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(GQ) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Eritrea</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(ER) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Estonia</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(EE) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Ethiopia</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(ET) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Fiji</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(FJ) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Finland</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(FI) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">France</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(FR) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Gabon</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(GA) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Gambia</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(GM) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Georgia</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(GE) %></font></td></tr>
+
+
+
+							<tr><td class="center"><font size=5 color="black">Germany</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(DE) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Ghana</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(GH) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Greece</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(GR) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Guatemala</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(GT) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Guinea</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(GN) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Georgia</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(GE) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Gabon</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(GA) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Gambia</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(GM) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Georgia</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(GE) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Guinea-Bissau</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(GW) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Guyana</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(GY) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Haiti</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(HT) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Honduras</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(HN) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Hungary</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(HU) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Iceland</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(IS) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">India</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(IN) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Indonesia</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(ID) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Iran</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(IR) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Iraq</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(IQ) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Jamaica</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(JM) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Ireland</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(IE) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Japan</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(JP) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Jordan</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(JO) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Kenya</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(KE) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Israel</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(IL) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Kuwait</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(KW) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Kyrgyzstan</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(KG) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Italy</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(IT) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Latvia</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(LV) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Lebanon</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(LB) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Liberia</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(LR) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Luxembourg</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(LU) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Madagascar</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(MG) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Malawi</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(MW) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Malaysia</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(MY) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Mauritania</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(MR) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Mexico</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(MX) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Mongolia</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(MN) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Morocco</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(MA) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Namibia</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(NA) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Nepal</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(NP) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Netherlands</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(NL) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">New Zealand</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(NZ) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Nigeria</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(NG) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Pakistan</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(PK) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Peru</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(PE) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Philippines</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(PH) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Poland</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(PL) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Portugal</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(PT) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Qatar</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(QA) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Romania</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(RO) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Rwanda</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(RW) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Saudi Arabia</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(SA) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Singapore</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(SG) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Somalia</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(SO) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">South Africa</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(ZA) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Spain</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(ES) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Sri Lanka</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(LK) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Sweden</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(SE) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Switzerland</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(CH) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Thailand</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(TH) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Turkey</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(TR) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">United Arab Emirates</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(AE) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">United Kingdom</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(AE) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">United States</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(US) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Uruguay</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(UY) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Zambia</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(ZM) %></font></td></tr>
+
+							<tr><td class="center"><font size=5 color="black">Zimbabwe</font></td>
+							<td class="center"><font size=5 color="black"><%- JSON.stringify(ZW) %></font></td></tr>
 							
-						</p>
-						<p>
-							<button class="btn btn-small btn-info">Small button</button>
-							<button class="btn btn-small btn-inverse">Small button</button>
-							<button class="btn btn-large btn-primary btn-round">Round button</button>
-							<button class="btn btn-large btn-round"><i class="halflings-icon white ok"></i></button>
-							<button class="btn btn-primary"><i class="halflings-icon white edit"></i></button>
-						</p>
-						<p>
-							<button class="btn btn-mini">Mini button</button>
-							<button class="btn btn-mini btn-primary">Mini button</button>
-							<button class="btn btn-mini btn-danger">Mini button</button>
-							<button class="btn btn-mini btn-warning">Mini button</button>
-							<button class="btn btn-mini btn-info">Mini button</button>
-							<button class="btn btn-mini btn-success">Mini button</button>
-							<button class="btn btn-mini btn-inverse">Mini button</button>
-						</p>
-						
+						  </tbody>
+					  </table>            
 					</div>
 				</div><!--/span-->
 				
-			</div><!--/row-->
-			
-			<hr>
-			
-			<div class="row-fluid">
-				
-				<div class="box span12">
-					<div class="box-header">
-						<h2><i class="halflings-icon th"></i><span class="break"></span>Tabs</h2>
-					</div>
-					<div class="box-content">
-						<ul class="nav tab-menu nav-tabs" id="myTab">
-							<li class="active"><a href="#info">Info</a></li>
-							<li><a href="#custom">Custom</a></li>
-							<li><a href="#messages">Messages</a></li>
-						</ul>
-						 
-						<div id="myTabContent" class="tab-content">
-							<div class="tab-pane active" id="info">
-								<p>
-
-									Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.   
-								</p>
-
-							</div>
-							<div class="tab-pane" id="custom">
-								<p>
-									Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.   
-								</p>
-							</div>
-							<div class="tab-pane" id="messages">
-								<p>
-									Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.   
-								</p>
-								<p>
-									Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer
-								</p>
-							</div>
-						</div>
-					</div>
-				</div><!--/span-->
-			
-			</div><!--/row-->			
+			</div><!--/row-->		
 		
 
 	</div><!--/.fluid-container-->

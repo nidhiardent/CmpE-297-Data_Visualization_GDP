@@ -52,7 +52,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</a>
-				<a class="brand" href="index.html"><span>Visualizarix</span></a>
+				<a class="brand" href="index.html"><span>Metro</span></a>
 								
 				<!-- start: Header Menu -->		
 							<%include includes/header.ejs %>

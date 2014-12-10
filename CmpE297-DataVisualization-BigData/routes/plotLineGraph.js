@@ -3,12 +3,12 @@
  * GET home page.
  */
 
-exports.mongo = function(req, res){
+exports.plotLine = function(req, res){
 	
 	var MongoClient = require('mongodb').MongoClient;
 
 	// Connect to the db
-	MongoClient.connect("mongodb://localhost:27017/sample", function(err, db) {
+	MongoClient.connect("mongodb://localhost:27017/countryTradeDetails", function(err, db) {
 		if(err) {
 			return console.dir(err);
 		}
@@ -37,5 +37,5 @@ exports.mongo = function(req, res){
 	});
 
 
-	res.render('world_gdp',{test:"345587650000"});
+	res.render('line');
 };

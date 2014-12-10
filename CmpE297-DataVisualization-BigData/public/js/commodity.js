@@ -160,7 +160,7 @@ flowChart.width(200)
 		.minAngleForLabel(0)
 		.label(function(d) { return d.data.key; });
 
-volumeChart.width(850)
+volumeChart.width(750)
 	.height(300)
 	.dimension(yearDim)
 	.group(yearDimGroup)
@@ -177,7 +177,7 @@ volumeChart.width(850)
 			.xAxis().ticks(6).tickFormat(d3.format("d"));	
 volumeChart.yAxis().ticks(5).tickFormat(function(v) {return v;});
 
-rowChart.width(500)
+rowChart.width(400)
 	.height(300)
 	.dimension(countryDimension)
 	.group(countryGroup)

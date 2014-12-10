@@ -16,6 +16,8 @@ var app = express();
 var hadoop = require("./routes/hadoop");
 var mongo_hd = require("./routes/mongo_hadoop");
 var md = require("./routes/mongo");
+var plotLineGraph = require("./routes/plotLineGraph");
+var world_gdp = require("./routes/world_gdp");
 
 //all environments
 app.set('port', process.env.PORT || 3000);
@@ -65,9 +67,9 @@ app.get('/feature', function(req, res){
 });
 
 //UI Page
-app.get('/world_gdp', function(req, res){
-	res.render('world_gdp');
-});
+app.get('/world_gdp', world_gdp.getDefaultGDP);
+
+app.post('/process_world_gdp', world_gdp.getGDPDetails);
 
 //widget Page
 app.get('/line_graph_gdp', function(req, res){
@@ -77,6 +79,24 @@ app.get('/line_graph_gdp', function(req, res){
 //widget Page
 app.get('/top_countries_gdp', function(req, res){
 	res.render('top_countries_gdp');
+});
+
+//widget Page
+app.get('/line', plotLineGraph.plotLine);
+
+//Hadoop page
+app.get('/submenu', function(req, res){
+	res.render('hadoop');
+});
+
+//Bootstrap Page
+app.get('/submenu2', function(req, res){
+	res.render('bootstrap');
+});
+
+//D3 Page
+app.get('/submenu3', function(req, res){
+	res.render('d3');
 });
 
 //Create Server

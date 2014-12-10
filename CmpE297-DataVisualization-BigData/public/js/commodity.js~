@@ -160,7 +160,7 @@ flowChart.width(200)
 		.minAngleForLabel(0)
 		.label(function(d) { return d.data.key; });
 
-volumeChart.width(900)
+volumeChart.width(750)
 	.height(300)
 	.dimension(yearDim)
 	.group(yearDimGroup)
