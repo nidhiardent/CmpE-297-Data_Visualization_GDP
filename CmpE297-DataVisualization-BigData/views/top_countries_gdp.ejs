@@ -5,22 +5,15 @@
 	<!-- start: Meta -->
 	<meta charset="utf-8">
 	<title>Visualizarix</title>
-	<meta name="description" content="Bootstrap Metro Dashboard">
-	<meta name="author" content="Dennis Ji">
-	<meta name="keyword" content="Metro, Metro UI, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
-	<!-- end: Meta -->
 	
-	<!-- start: Mobile Specific -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!-- end: Mobile Specific -->
 	
-	<!-- start: CSS -->
+	
 	<link id="bootstrap-style" href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/bootstrap-responsive.min.css" rel="stylesheet">
 	<link id="base-style" href="css/style.css" rel="stylesheet">
 	<link id="base-style-responsive" href="css/style-responsive.css" rel="stylesheet">
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'>
-	<!-- end: CSS -->
 	
 
 	<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -36,60 +29,48 @@
 	<!-- start: Favicon -->
 	<link rel="shortcut icon" href="img/favicon.ico">
 	<!-- end: Favicon -->
+	<style>
+	#chartdiv {
+	width		: 100%;
+	height		: 650px;
+	font-size	: 11px;
+}							
+</style>
+<script type="text/javascript" src="http://www.amcharts.com/lib/3/amcharts.js"></script>
+<script type="text/javascript" src="http://www.amcharts.com/lib/3/pie.js"></script>
+<script type="text/javascript" src="http://www.amcharts.com/lib/3/themes/none.js"></script>
+	
+<script type="text/javascript">
 
-<!-- start: HighChart -->
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-		<style type="text/css">
-${demo.css}
-		</style>
-		<script type="text/javascript">
-$(function () {
+AmCharts.ready(function(){
 
-new Highcharts.Chart({
-            chart: {
-                renderTo: 'container',
-                type: 'pie',
-                backgroundColor: 'rgba(255, 255, 255, 0)'
-            },
-      
-        
-        
-            series: [
-                {
-                    name: '',
-                    data: [['USA', 90], ['India', 40], ['Russia', 50], ['China', 50], ['Japan', 50], ['Germany', 70], ['Australia', 50], ['UK', 50], ['Pakistan', 50], ['Dubai', 50]],
-                    size: '70%',
-                    innerSize: '60%',
-                    showInLegend: true
-                },                {
-                    name: '',
-                    data: [['USA', 50], ['India', 50], ['Russia', 50], ['China', 50], ['Japan', 50], ['Germany', 50], ['Australia', 50], ['UK', 50], ['Pakistan', 50], ['Dubai', 50]],
-                    size: '60%',
-                    innerSize: '50%',
-                    showInLegend: true
-                },                {
-                 name: '',
-                    data: [['China', 50], ['Canada', 50], ['USA', 50], ['Germany', 50], ['Bangladesh', 50], ['France', 50], ['India', 50], ['UK', 50], ['Japan', 50], ['Dubai', 50]],
-                    size: '50%',
-                    innerSize: '40%',
-                    showInLegend: true
-                },         {
-                 name: '',
-                    data: [['India', 50], ['canada', 50], ['UK', 50], ['Sri Lanka', 50], ['Japan', 50], ['West Indies', 50], ['South Africa', 50], ['Singapore', 50], ['Pakistan', 50], ['UAE', 50]],
-                    size: '40%',
-                    innerSize: '30%',
-                    showInLegend: true
-                }
-            ]
-        });
+var chart = AmCharts.makeChart("chartdiv", {
+    "type": "pie",
+	"theme": "none",
+    "titles": [{
+        "text": "Percentage distribution of GDP",
+        "size": 16
+    }],
+    "dataProvider": <%- year %>,
+    "valueField": "GDP",
+    "titleField": "country",
+    "startEffect": "elastic",
+    "startDuration": 2,
+    "labelRadius": 15,
+    "innerRadius": "50%",
+    "depth3D": 10,
+    "balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+    "angle": 15,
+    "exportConfig":{	
+      menuItems: [{
+      icon: '/lib/3/images/export.png',
+      format: 'png'	  
+      }]  
+	}
+});
 });
 
-</script>	
-
-<script src="http://code.highcharts.com/highcharts.js"></script>
-<script src="http://code.highcharts.com/modules/exporting.js"></script>	
-<!-- end: HighStart -->		
-		
+</script>		
 </head>
 
 <body>
@@ -133,135 +114,44 @@ new Highcharts.Chart({
 					
 
 			<div class="row-fluid sortable">
-				<div class="box span9">
+				<div class="box span12">
 					<div class="box-header">
-						<h2><i class="halflings-icon font"></i><span class="break"></span>High Charts</h2>
+						<h2><i class="halflings-icon font"></i><span class="break"></span>Donut Chart Representation</h2>
+					
 					</div>
 					<div class="box-content">
 						  <div class="page-header">
-							  <h1> Top 10 Countries <small>Gross Domestic Product (4 years)</small></h1>
+							  <h1> Top 10 Countries <small>sorted by Gross Domestic Product (<%=gdp_year%>)</small></h1>
+							
+							  <form action = "getDonutforTopCountries" method="post">
+							  
+							<input type="text" name="year" id="year" list="yearList" class="dropdown-menu" placeholder="Select Year" required/>
+							<datalist id="yearList" autocomplete="on">
+								<% for(var i=2012;i>=1970;i--) { %>
+									<option value="<%=i%>"></option>
+								<% } %>	
+							</datalist>
+							<input type="hidden" value="submit"/>
+						</form><br>
 						  </div>     
-						  <div class="row-fluid" id="highchart">            
+						  <div class="row-fluid" id="chartdiv">            
 							  
 
 
-								<div id="container" style="height: 700px; width: 700px"></div>
+								<div id="chartdiv"></div>
 
 
 
 						  </div><!--/row -->                           
 						
-						  <div class="row-fluid">
-							  <div class="span12">
-								  <h3>Example blockquotes</h3>
-								  <div class="row-fluid">
-									<div class="span6">
-									  <p>Default blockquotes are styled as such:</p>
-									  <blockquote>
-										<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis.</p>
-										<small>Someone famous in <cite title="">Body of work</cite></small>
-									  </blockquote>
-									</div>
-									<div class="span6">
-									  <p>You can always float your blockquote to the right:</p>
-									  <blockquote class="pull-right">
-										<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis.</p>
-										<small>Someone famous in <cite title="">Body of work</cite></small>
-									  </blockquote>
-									</div>
-								  </div>
-							  </div>
+						 
 						  </div>
-						  <div class="row-fluid">
-								<div class="span6">
-								<h3>More Sample Text</h3>
-								<p>
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales at. Nulla tellus elit, varius non commodo eget, mattis vel eros. In sed ornare nulla. Donec consectetur, velit a pharetra ultricies, diam lorem lacinia risus, ac commodo orci erat eu massa. Sed sit amet nulla ipsum. Donec felis mauris, vulputate sed tempor at, aliquam a ligula. Pellentesque non pulvinar nisi.
-								</p>
-								</div>
-								<div class="span6">
-								<h3>And Paragraphs</h3>
-								<p>
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales at. Nulla tellus elit, varius non commodo eget, mattis vel eros. In sed ornare nulla. Donec consectetur, velit a pharetra ultricies, diam lorem lacinia risus, ac commodo orci erat eu massa. Sed sit amet nulla ipsum. Donec felis mauris, vulputate sed tempor at, aliquam a ligula. Pellentesque non pulvinar nisi.
-								</p>
-							  </div>
-						  </div>
-						  <div class="row-fluid">
-							  <div class="span12">
-								<h2>Example use of Tooltips</h2>
-								<p>Hover over the links below to see tooltips:</p>
-								<div class="tooltip-demo well">
-								  <p class="muted" style="margin-bottom: 0;">Tight pants next level keffiyeh <a href="#" data-rel="tooltip" data-original-title="first tooltip">you probably</a> haven't heard of them. Photo booth beard raw denim letterpress vegan messenger bag stumptown. Farm-to-table seitan, mcsweeney's fixie sustainable quinoa 8-bit american appadata-rel <a href="#" data-rel="tooltip" data-original-title="Another tooltip">have a</a> terry richardson vinyl chambray. Beard stumptown, cardigans banh mi lomo thundercats. Tofu biodiesel williamsburg marfa, four loko mcsweeney's cleanse vegan chambray. A <a href="#" data-rel="tooltip" data-original-title="Another one here too">really ironic</a> artisan whatever keytar, scenester farm-to-table banksy Austin <a href="#" data-rel="tooltip" data-original-title="The last tip!">twitter handle</a> freegan cred raw denim single-origin coffee viral.
-								  </p>
-								</div>                                  
-							  </div>
-						  </div>	 
+						  
+						  
 					  </div>
 				</div><!--/span-->
 				
-				<div class="box span3">
-					<div class="box-header" data-original-title>
-						<h2><i class="halflings-icon list"></i><span class="break"></span>Unordered List</h2>
-					</div>
-					<div class="box-content">
-						<ul>
-						  <li>Lorem ipsum dolor sit amet</li>
-						  <li>Consectetur adipiscing elit</li>
-						  <li>Integer molestie lorem at massa</li>
-						  <li>Facilisis in pretium nisl aliquet</li>
-						  <li>Nulla volutpat aliquam velit
-							<ul>
-							  <li>Phasellus iaculis neque</li>
-							  <li>Purus sodales ultricies</li>
-							  <li>Vestibulum laoreet porttitor sem</li>
-							  <li>Ac tristique libero volutpat at</li>
-							</ul>
-						  </li>
-						  <li>Faucibus porta lacus fringilla vel</li>
-						  <li>Aenean sit amet erat nunc</li>
-						  <li>Eget porttitor lorem</li>
-						</ul>            
-					</div>
-				</div><!--/span-->
 				
-				<div class="box span3">
-					<div class="box-header" data-original-title>
-						<h2><i class="halflings-icon list"></i><span class="break"></span>Ordered List</h2>
-					</div>
-					<div class="box-content">
-						<ol>
-						  <li>Lorem ipsum dolor sit amet</li>
-						  <li>Consectetur adipiscing elit</li>
-						  <li>Integer molestie lorem at massa</li>
-						  <li>Facilisis in pretium nisl aliquet</li>
-						  <li>Nulla volutpat aliquam velit</li>
-						  <li>Faucibus porta lacus fringilla vel</li>
-						  <li>Aenean sit amet erat nunc</li>
-						  <li>Eget porttitor lorem</li>
-						</ol>           
-					</div>
-				</div><!--/span-->
-				
-				<div class="box span3">
-					<div class="box-header" data-original-title>
-						<h2><i class="halflings-icon list"></i><span class="break"></span>Description List</h2>
-					</div>
-					<div class="box-content">
-						<dl>
-						  <dt>Description lists</dt>
-						  <dd>A description list is perfect for defining terms.</dd>
-						  <dt>Euismod</dt>
-						  <dd>Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.</dd>
-						  <dd>Donec id elit non mi porta gravida at eget metus.</dd>
-						  <dt>Malesuada porta</dt>
-						  <dd>Etiam porta sem malesuada magna mollis euismod.</dd>
-						</dl>            
-					</div>
-				</div><!--/span-->
-				
-				
-			
-			</div><!--/row-->
     
 
 	</div><!--/.fluid-container-->

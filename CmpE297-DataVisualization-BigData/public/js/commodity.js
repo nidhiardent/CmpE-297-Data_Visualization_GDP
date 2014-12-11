@@ -109,7 +109,7 @@ bubbleChart.width(750)
 			})
 			.x(d3.scale.linear().domain(xrange))
 			.y(d3.scale.linear().domain(yrange))
-			.r(d3.scale.linear().domain([0,300]))
+			.r(d3.scale.linear().domain([0,500]))
 		
 			.elasticY(true)
 			.yAxisPadding(200)
@@ -121,8 +121,8 @@ bubbleChart.width(750)
 				return p.key;
 				})
 			.title(function(p){
-				return "Total trade:" +  p.value.trade_sum +"\n"+
-						"Trade average:"+ numberFormat(p.value.avg)
+				return "Total trade:$" +  p.value.trade_sum +"\n"+
+						"Trade average:$"+ numberFormat(p.value.avg)
 			})
 				
 			.renderLabel(true)

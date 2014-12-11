@@ -18,6 +18,8 @@ var mongo_hd = require("./routes/mongo_hadoop");
 var md = require("./routes/mongo");
 var plotLineGraph = require("./routes/plotLineGraph");
 var world_gdp = require("./routes/world_gdp");
+var getLineDetails = require("./routes/getLineData");
+var getDonutChart = require("./routes/getDonutChart");
 
 //all environments
 app.set('port', process.env.PORT || 3000);
@@ -71,15 +73,21 @@ app.get('/world_gdp', world_gdp.getDefaultGDP);
 
 app.post('/process_world_gdp', world_gdp.getGDPDetails);
 
-//widget Page
-app.get('/line_graph_gdp', function(req, res){
-	res.render('line_graph_gdp');
-});
 
-//widget Page
-app.get('/top_countries_gdp', function(req, res){
-	res.render('top_countries_gdp');
-});
+
+
+//widget Page -- Nidhi
+app.get('/line_graph_gdp', getLineDetails.getDefaultLineGraph);
+app.post('/plotLineGraph', getLineDetails.plotLineGraph);
+
+
+
+
+//widget Page -- Dreema
+app.get('/top_countries_gdp', getDonutChart.get_gdp);
+app.post('/getDonutforTopCountries', getDonutChart.post_gdp);
+
+
 
 //widget Page
 app.get('/line', plotLineGraph.plotLine);

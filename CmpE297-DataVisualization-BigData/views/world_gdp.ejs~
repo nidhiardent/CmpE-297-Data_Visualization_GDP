@@ -551,7 +551,7 @@ AmCharts.ready(function() {
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</a>
-				<a class="brand" href="index.html"><span>Matrix</span></a>
+				<a class="brand" href="index.html"><span>Visualizarix</span></a>
 								
 				<!-- start: Header Menu -->		
 							<%include includes/header.ejs %>
@@ -600,7 +600,7 @@ AmCharts.ready(function() {
 					</div>
 					<div class="box-content">
 						<form action = "process_world_gdp" method="post">
-							<h2><font size=6 color="blue"> Select year (default 2012)</font></h2>
+							<h2><font size=6 color="blue"> Select year</font></h2>
 							<input type="text" name="year" id="year" list="yearList" class="dropdown-menu" placeholder="Select Year" required/>
 							<datalist id="yearList" autocomplete="on">
 								<% for(var i=2012;i>=1970;i--) { %>
